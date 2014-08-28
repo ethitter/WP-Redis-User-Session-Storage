@@ -2,6 +2,8 @@
 
 Store WordPress user session tokens in Redis rather than the usermeta table. Requires PECL Redis library.
 
+Requires WordPress 4.0, which should be released soon but isn’t currently suitable for production sites. In the meantime, **everything** is subject to change.
+
 ## Authors
 
 * Erick Hitter
