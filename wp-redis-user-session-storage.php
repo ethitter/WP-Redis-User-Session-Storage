@@ -55,26 +55,25 @@ class WP_Redis_User_Session_Storage extends WP_Session_Tokens {
 	public function __construct( $user_id ) {
 		// General Redis settings
 		$redis = array(
-			'host' => '127.0.0.1',
-			'port' => 6379,
+			'host'       => '127.0.0.1',
+			'port'       => 6379,
+			'serializer' => Redis::SERIALIZER_PHP,
 		);
 
-		if ( defined( 'WP_REDIS_BACKEND_HOST' ) && WP_REDIS_BACKEND_HOST ) {
-			$redis['host'] = WP_REDIS_BACKEND_HOST;
+		if ( defined( 'WP_REDIS_USER_SESSION_HOST' ) && WP_REDIS_USER_SESSION_HOST ) {
+			$redis['host'] = WP_REDIS_USER_SESSION_HOST;
 		}
-		if ( defined( 'WP_REDIS_BACKEND_PORT' ) && WP_REDIS_BACKEND_PORT ) {
-			$redis['port'] = WP_REDIS_BACKEND_PORT;
+		if ( defined( 'WP_REDIS_USER_SESSION_PORT' ) && WP_REDIS_USER_SESSION_PORT ) {
+			$redis['port'] = WP_REDIS_USER_SESSION_PORT;
 		}
-		if ( defined( 'WP_REDIS_BACKEND_AUTH' ) && WP_REDIS_BACKEND_AUTH ) {
-			$redis['auth'] = WP_REDIS_BACKEND_AUTH;
+		if ( defined( 'WP_REDIS_USER_SESSION_AUTH' ) && WP_REDIS_USER_SESSION_AUTH ) {
+			$redis['auth'] = WP_REDIS_USER_SESSION_AUTH;
 		}
-		if ( defined( 'WP_REDIS_BACKEND_DB' ) && WP_REDIS_BACKEND_DB ) {
-			$redis['database'] = WP_REDIS_BACKEND_DB;
+		if ( defined( 'WP_REDIS_USER_SESSION_DB' ) && WP_REDIS_USER_SESSION_DB ) {
+			$redis['database'] = WP_REDIS_USER_SESSION_DB;
 		}
-		if ( ( defined( 'WP_REDIS_SERIALIZER' ) ) ) {
-			$redis['serializer'] =  WP_REDIS_SERIALIZER;
-		} else {
-			$redis['serializer'] =  Redis::SERIALIZER_PHP;
+		if ( defined( 'WP_REDIS_USER_SESSION_SERIALIZER' ) && WP_REDIS_USER_SESSION_SERIALIZER ) {
+			$redis['serializer'] =  WP_REDIS_USER_SESSION_SERIALIZER;
 		}
 
 		// Use Redis PECL library.
