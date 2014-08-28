@@ -1,4 +1,26 @@
 <?php
+/*
+Plugin Name: WP Redis User Session Storage
+Plugin URI: https://ethitter.com/plugins/wp-redis-user-session-storage/
+Description: Store WordPress session tokens in Redis rather than the usermeta table. Requires the Redis PECL extension.
+Version: 0.1
+Author: Erick Hitter
+Author URI: https://ethitter.com/
+
+This program is free software; you can redistribute it and/or modify
+it under the terms of the GNU General Public License as published by
+the Free Software Foundation; either version 2 of the License, or
+(at your option) any later version.
+
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU General Public License for more details.
+
+You should have received a copy of the GNU General Public License
+along with this program; if not, write to the Free Software
+Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
+*/
 
 /**
  * Redis-based user sessions token manager.
@@ -28,11 +50,9 @@ class WP_Redis_User_Session_Storage extends WP_Session_Tokens {
 	public $prefix = 'wpruss';
 
 	/**
-	 *
+	 * Create Redis connection using the Redis PECL extension
 	 */
 	public function __construct( $user_id ) {
-		global $blog_id, $table_prefix;
-
 		// General Redis settings
 		$redis = array(
 			'host' => '127.0.0.1',
@@ -223,7 +243,12 @@ class WP_Redis_User_Session_Storage extends WP_Session_Tokens {
 	}
 
 	/**
+	 * Build key for current user
 	 *
+	 * @since 0.1
+	 * @access protected
+	 *
+	 * @return string
 	 */
 	protected function get_key() {
 		return $this->prefix . ':' . $this->user_id;
@@ -231,9 +256,8 @@ class WP_Redis_User_Session_Storage extends WP_Session_Tokens {
 }
 
 /**
- *
+ * Override Core's default usermeta-based token storage
  */
 add_filter( 'session_token_manager', function( $manager ) {
 	return 'WP_Redis_User_Session_Storage';
 } );
-
