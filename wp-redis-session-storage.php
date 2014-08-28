@@ -1,23 +1,105 @@
 <?php
 
 /**
- * Meta-based user sessions token manager.
+ * Redis-based user sessions token manager.
  *
- * @since 4.0.0
+ * @since 0.1
  */
-class WP_Redis_Session_Storage extends WP_Session_Tokens {
+class WP_Redis_User_Session_Storage extends WP_Session_Tokens {
+	/**
+	 * Holds the Redis client.
+	 *
+	 * @var
+	 */
+	private $redis;
+
+	/**
+	 * Track if Redis is available
+	 *
+	 * @var bool
+	 */
+	private $redis_connected = false;
+
+	/**
+	 * Prefix used to namespace keys
+	 *
+	 * @var string
+	 */
+	public $prefix = 'wpruss';
+
+	/**
+	 *
+	 */
+	public function __construct( $user_id ) {
+		global $blog_id, $table_prefix;
+
+		// General Redis settings
+		$redis = array(
+			'host' => '127.0.0.1',
+			'port' => 6379,
+		);
+
+		if ( defined( 'WP_REDIS_BACKEND_HOST' ) && WP_REDIS_BACKEND_HOST ) {
+			$redis['host'] = WP_REDIS_BACKEND_HOST;
+		}
+		if ( defined( 'WP_REDIS_BACKEND_PORT' ) && WP_REDIS_BACKEND_PORT ) {
+			$redis['port'] = WP_REDIS_BACKEND_PORT;
+		}
+		if ( defined( 'WP_REDIS_BACKEND_AUTH' ) && WP_REDIS_BACKEND_AUTH ) {
+			$redis['auth'] = WP_REDIS_BACKEND_AUTH;
+		}
+		if ( defined( 'WP_REDIS_BACKEND_DB' ) && WP_REDIS_BACKEND_DB ) {
+			$redis['database'] = WP_REDIS_BACKEND_DB;
+		}
+		if ( ( defined( 'WP_REDIS_SERIALIZER' ) ) ) {
+			$redis['serializer'] =  WP_REDIS_SERIALIZER;
+		} else {
+			$redis['serializer'] =  Redis::SERIALIZER_PHP;
+		}
+
+		// Use Redis PECL library.
+		try {
+			$this->redis = new Redis();
+			$this->redis->connect( $redis['host'], $redis['port'] );
+			$this->redis->setOption( Redis::OPT_SERIALIZER, $redis['serializer'] );
+
+			if ( isset( $redis['auth'] ) ) {
+				$this->redis->auth( $redis['auth'] );
+			}
+
+			if ( isset( $redis['database'] ) ) {
+				$this->redis->select( $redis['database'] );
+			}
+
+			$this->redis_connected = true;
+		} catch ( RedisException $e ) {
+			$this->redis_connected = false;
+		}
+
+		// Ensure Core's session constructor fires
+		parent::__construct( $user_id );
+	}
 
 	/**
 	 * Get all sessions of a user.
 	 *
-	 * @since 4.0.0
+	 * @since 0.1
 	 * @access protected
 	 *
 	 * @return array Sessions of a user.
 	 */
 	protected function get_sessions() {
-		$sessions = get_user_meta( $this->user_id, 'session_tokens', true );
+		if ( ! $this->redis_connected ) {
+			return array();
+		}
 
+		$key = $this->get_key();
+
+		if ( ! $this->redis->exists( $key ) ) {
+			return array();
+		}
+
+		$sessions = $this->redis->get( $key );
 		if ( ! is_array( $sessions ) ) {
 			return array();
 		}
@@ -43,7 +125,7 @@ class WP_Redis_Session_Storage extends WP_Session_Tokens {
 	/**
 	 * Retrieve a session by its verifier (token hash).
 	 *
-	 * @since 4.0.0
+	 * @since 0.1
 	 * @access protected
 	 *
 	 * @param string $verifier Verifier of the session to retrieve.
@@ -62,7 +144,7 @@ class WP_Redis_Session_Storage extends WP_Session_Tokens {
 	/**
 	 * Update a session by its verifier.
 	 *
-	 * @since 4.0.0
+	 * @since 0.1
 	 * @access protected
 	 *
 	 * @param string $verifier Verifier of the session to update.
@@ -81,29 +163,35 @@ class WP_Redis_Session_Storage extends WP_Session_Tokens {
 	}
 
 	/**
-	 * Update a user's sessions in the usermeta table.
+	 * Update a user's sessions in Redis.
 	 *
-	 * @since 4.0.0
+	 * @since 0.1
 	 * @access protected
 	 *
 	 * @param array $sessions Sessions.
 	 */
 	protected function update_sessions( $sessions ) {
+		if ( ! $this->redis_connected ) {
+			return;
+		}
+
 		if ( ! has_filter( 'attach_session_information' ) ) {
 			$sessions = wp_list_pluck( $sessions, 'expiration' );
 		}
 
+		$key = $this->key();
+
 		if ( $sessions ) {
-			update_user_meta( $this->user_id, 'session_tokens', $sessions );
-		} else {
-			delete_user_meta( $this->user_id, 'session_tokens' );
+			$this->redis->set( $key, $sessions ) );
+		} elseif ( $this->redis->exists( $key ) ) {
+			$this->redis->del( $key );
 		}
 	}
 
 	/**
 	 * Destroy all session tokens for a user, except a single session passed.
 	 *
-	 * @since 4.0.0
+	 * @since 0.1
 	 * @access protected
 	 *
 	 * @param string $verifier Verifier of the session to keep.
@@ -116,7 +204,7 @@ class WP_Redis_Session_Storage extends WP_Session_Tokens {
 	/**
 	 * Destroy all session tokens for a user.
 	 *
-	 * @since 4.0.0
+	 * @since 0.1
 	 * @access protected
 	 */
 	protected function destroy_all_sessions() {
@@ -126,11 +214,25 @@ class WP_Redis_Session_Storage extends WP_Session_Tokens {
 	/**
 	 * Destroy all session tokens for all users.
 	 *
-	 * @since 4.0.0
+	 * @since 0.1
 	 * @access public
 	 * @static
 	 */
 	public static function drop_sessions() {
-		delete_metadata( 'user', false, 'session_tokens', false, true );
+		return false;
+	}
+
+	/**
+	 *
+	 */
+	protected function get_key() {
+		return $this->prefix . ':' . $this->user_id;
 	}
 }
+
+/**
+ *
+ */
+add_filter( 'session_token_manager', function ( $manager ) {
+	return 'WP_Redis_User_Session_Storage';
+} );
