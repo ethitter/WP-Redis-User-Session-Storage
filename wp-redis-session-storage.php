@@ -179,10 +179,10 @@ class WP_Redis_User_Session_Storage extends WP_Session_Tokens {
 			$sessions = wp_list_pluck( $sessions, 'expiration' );
 		}
 
-		$key = $this->key();
+		$key = $this->get_key();
 
 		if ( $sessions ) {
-			$this->redis->set( $key, $sessions ) );
+			$this->redis->set( $key, $sessions );
 		} elseif ( $this->redis->exists( $key ) ) {
 			$this->redis->del( $key );
 		}
@@ -233,6 +233,7 @@ class WP_Redis_User_Session_Storage extends WP_Session_Tokens {
 /**
  *
  */
-add_filter( 'session_token_manager', function ( $manager ) {
+add_filter( 'session_token_manager', function( $manager ) {
 	return 'WP_Redis_User_Session_Storage';
 } );
+
