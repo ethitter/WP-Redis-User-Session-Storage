@@ -18,4 +18,4 @@ Requires WordPress 4.0, which should be released soon but isn’t currently suit
 
 By default, the plugin uses `127.0.0.1` and `6379` as the default host and port when creating a new client instance; the default database of `0` is also used. Three constants are provided to override these default values.
 
-Specify `WP_REDIS_BACKEND_HOST`, `WP_REDIS_BACKEND_PORT`, and `WP_REDIS_BACKEND_DB` to set the necessary, non-default connection values for your Redis instance.
+Specify `WP_REDIS_USER_SESSION_HOST`, `WP_REDIS_USER_SESSION_PORT`, and `WP_REDIS_USER_SESSION_DB` to set the necessary, non-default connection values for your Redis instance.
