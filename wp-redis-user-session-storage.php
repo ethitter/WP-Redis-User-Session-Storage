@@ -256,7 +256,11 @@ class WP_Redis_User_Session_Storage extends WP_Session_Tokens {
 
 /**
  * Override Core's default usermeta-based token storage
+ *
+ * @filter session_token_manager
+ * @return string
  */
-add_filter( 'session_token_manager', function( $manager ) {
+function wp_redis_user_session_storage() {
 	return 'WP_Redis_User_Session_Storage';
-} );
+}
+add_filter( 'session_token_manager', 'wp_redis_user_session_storage' );
