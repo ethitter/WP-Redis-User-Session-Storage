@@ -57,6 +57,7 @@ class WP_Redis_User_Session_Storage extends WP_Session_Tokens {
 		$redis = array(
 			'host'       => '127.0.0.1',
 			'port'       => 6379,
+			'socket'     => null,
 			'serializer' => Redis::SERIALIZER_PHP,
 		);
 
@@ -65,6 +66,9 @@ class WP_Redis_User_Session_Storage extends WP_Session_Tokens {
 		}
 		if ( defined( 'WP_REDIS_USER_SESSION_PORT' ) && WP_REDIS_USER_SESSION_PORT ) {
 			$redis['port'] = WP_REDIS_USER_SESSION_PORT;
+		}
+		if ( defined( 'WP_REDIS_USER_SESSION_SOCKET' ) && WP_REDIS_USER_SESSION_SOCKET ) {
+			$redis['socket'] = WP_REDIS_USER_SESSION_SOCKET;
 		}
 		if ( defined( 'WP_REDIS_USER_SESSION_AUTH' ) && WP_REDIS_USER_SESSION_AUTH ) {
 			$redis['auth'] = WP_REDIS_USER_SESSION_AUTH;
@@ -79,7 +83,14 @@ class WP_Redis_User_Session_Storage extends WP_Session_Tokens {
 		// Use Redis PECL library.
 		try {
 			$this->redis = new Redis();
-			$this->redis->connect( $redis['host'], $redis['port'] );
+
+			// Socket preferred, but TCP supported
+			if ( $redis['socket'] ) {
+				$this->redis->connect( $redis['socket'] );
+			} else {
+				$this->redis->connect( $redis['host'], $redis['port'] );
+			}
+
 			$this->redis->setOption( Redis::OPT_SERIALIZER, $redis['serializer'] );
 
 			if ( isset( $redis['auth'] ) ) {
