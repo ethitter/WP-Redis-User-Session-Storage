@@ -23,6 +23,13 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 */
 
 /**
+ * Don't load in contexts that lack the WP_Session_Tokens class
+ */
+if ( ! class_exists( 'WP_Session_Tokens' ) ) {
+	return;
+}
+
+/**
  * Redis-based user sessions token manager.
  *
  * @since 0.1
