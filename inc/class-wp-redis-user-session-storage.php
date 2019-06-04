@@ -21,7 +21,7 @@ class WP_Redis_User_Session_Storage extends WP_Session_Tokens {
 	/**
 	 * Holds the Redis client.
 	 *
-	 * @var
+	 * @var Redis
 	 */
 	private $redis;
 
@@ -41,9 +41,11 @@ class WP_Redis_User_Session_Storage extends WP_Session_Tokens {
 
 	/**
 	 * Create Redis connection using the Redis PECL extension
+	 *
+	 * @param int $user_id User ID.
 	 */
 	public function __construct( $user_id ) {
-		// General Redis settings
+		// General Redis settings.
 		$redis = array(
 			'host'       => '127.0.0.1',
 			'port'       => 6379,
@@ -67,14 +69,14 @@ class WP_Redis_User_Session_Storage extends WP_Session_Tokens {
 			$redis['database'] = WP_REDIS_USER_SESSION_DB;
 		}
 		if ( defined( 'WP_REDIS_USER_SESSION_SERIALIZER' ) && WP_REDIS_USER_SESSION_SERIALIZER ) {
-			$redis['serializer'] =  WP_REDIS_USER_SESSION_SERIALIZER;
+			$redis['serializer'] = WP_REDIS_USER_SESSION_SERIALIZER;
 		}
 
 		// Use Redis PECL library.
 		try {
 			$this->redis = new Redis();
 
-			// Socket preferred, but TCP supported
+			// Socket preferred, but TCP supported.
 			if ( $redis['socket'] ) {
 				$this->redis->connect( $redis['socket'] );
 			} else {
@@ -96,7 +98,7 @@ class WP_Redis_User_Session_Storage extends WP_Session_Tokens {
 			$this->redis_connected = false;
 		}
 
-		// Ensure Core's session constructor fires
+		// Pass user ID to parent.
 		parent::__construct( $user_id );
 	}
 
