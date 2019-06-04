@@ -239,6 +239,7 @@ class WP_Redis_User_Session_Storage extends WP_Session_Tokens {
 	 * @since 0.1
 	 * @access public
 	 * @static
+	 *
 	 * @return bool
 	 */
 	public static function drop_sessions() {
@@ -247,6 +248,9 @@ class WP_Redis_User_Session_Storage extends WP_Session_Tokens {
 
 	/**
 	 * Empty database, clearing all tokens.
+	 *
+	 * @since 0.2
+	 * @access protected
 	 *
 	 * @return bool
 	 */
@@ -270,7 +274,6 @@ class WP_Redis_User_Session_Storage extends WP_Session_Tokens {
 /**
  * Override Core's default usermeta-based token storage
  *
- * @filter session_token_manager
  * @return string
  */
 function wp_redis_user_session_storage() {
