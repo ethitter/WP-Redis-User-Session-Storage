@@ -239,9 +239,19 @@ class WP_Redis_User_Session_Storage extends WP_Session_Tokens {
 	 * @since 0.1
 	 * @access public
 	 * @static
+	 * @return bool
 	 */
 	public static function drop_sessions() {
-		return false;
+		return static::get_instance( 0 )->flush_redis_db();
+	}
+
+	/**
+	 * Empty database, clearing all tokens.
+	 *
+	 * @return bool
+	 */
+	protected function flush_redis_db() {
+		return $this->redis->flushDB();
 	}
 
 	/**
