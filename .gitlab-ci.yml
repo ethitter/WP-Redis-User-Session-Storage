@@ -86,12 +86,3 @@ PHPCS:
     - phpcs --config-set installed_paths $HOME/.composer/vendor/wp-coding-standards/wpcs,$HOME/.composer/vendor/automattic/vipwpcs,$HOME/.composer/vendor/phpcompatibility/php-compatibility,$HOME/.composer/vendor/phpcompatibility/phpcompatibility-paragonie,$HOME/.composer/vendor/phpcompatibility/phpcompatibility-wp
   script:
     - phpcs -n
-
-PluginSVN:
-  stage: deploy
-  image: containers.ethitter.com:443/docker/wp-org-plugin-deploy:latest
-  before_script:
-    - curl -o ./bin/deploy.sh https://git-cdn.e15r.co/open-source/wp-org-plugin-deploy/raw/master/scripts/deploy.sh
-    - chmod +x ./bin/deploy.sh
-  script: ./bin/deploy.sh
-  when: on_success
