@@ -35,9 +35,17 @@ class WP_Redis_User_Session_Storage extends WP_Session_Tokens {
 	/**
 	 * Prefix used to namespace keys
 	 *
+	 * We could be running multiple wordpress instances with the same shared redis environment.
+	 * So we set our key prefix to be a tuple of our DB_NAME and table_prefix.
+	 *
+	 * A good example is a cloud hosting service that offers a 2GB redis-as-a-service
+	 * like Google Compute Engine where sharing makes sense.
+	 *
+	 * This also allows to reuse the below code for woocommerce sessions in part.
+	 *
 	 * @var string
 	 */
-	public $prefix = 'wpruss';
+	public $redis_key_prefix = DB_NAME . '_' . $table_prefix;
 
 	/**
 	 * Create Redis connection using the Redis PECL extension
@@ -267,7 +275,7 @@ class WP_Redis_User_Session_Storage extends WP_Session_Tokens {
 	 * @return string
 	 */
 	protected function get_key() {
-		return $this->prefix . ':' . $this->user_id;
+		return $this->redis_key_prefix . ':' . $this->user_id;
 	}
 }
 
