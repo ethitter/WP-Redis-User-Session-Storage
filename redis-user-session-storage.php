@@ -39,40 +39,59 @@ use WP_Session_Tokens;
  * @return void
  */
 function load() {
-	if ( ! class_exists( Redis::class, false ) ) {
-		return;
-	}
-
-	if ( ! class_exists( WP_Session_Tokens::class, false ) ) {
-		return;
-	}
-
-	if ( class_exists( WP_Redis_User_Session_Storage::class, false ) ) {
-		// TODO: warn user to disable old plugin.
+	if (
+		! class_exists( Redis::class, false )
+		|| ! class_exists( WP_Session_Tokens::class, false )
+	) {
 		return;
 	}
 
 	require_once __DIR__ . '/inc/class-plugin.php';
-
-	class_alias(
-		Plugin::class,
-		'WP_Redis_User_Session_Storage',
-		false
-	);
 
 	add_filter(
 		'session_token_manager',
 		__NAMESPACE__ . '\set_session_token_manager'
 	);
 }
-
-add_action( 'plugins_loaded', __NAMESPACE__ . '\load' );
+load();
 
 /**
  * Override Core's default usermeta-based token storage.
  *
+ * @param string $manager
  * @return string
  */
-function set_session_token_manager() {
+function set_session_token_manager( $manager ) {
+	if ( class_exists( WP_Redis_User_Session_Storage::class, false ) ) {
+		add_action( 'admin_notices', __NAMESPACE__ . '\admin_notice' );
+
+		return $manager;
+	}
+
 	return Plugin::class;
+}
+
+/**
+ * Show admin notice to certain users when older version is active.
+ *
+ * @return void
+ */
+function admin_notice() {
+	if ( ! current_user_can( 'activate_plugins' ) ) {
+		return;
+	}
+
+	?>
+	<div id="message" class="error">
+		<p>
+			<?php
+				printf(
+					__( '%1$s: An outdated version of this plugin, %2$s, is active. Please deactivate it to use the current version.', 'redis-user-session-storage' ),
+					'<strong>Redis User Session Storage</strong>',
+					'<em>WP Redis User Session Storage</em>'
+				);
+			?>
+		</p>
+	</div>
+	<?php
 }
