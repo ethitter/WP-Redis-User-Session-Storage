@@ -58,7 +58,7 @@ load();
 /**
  * Override Core's default usermeta-based token storage.
  *
- * @param string $manager
+ * @param string $manager Name of session-manager class.
  * @return string
  */
 function set_session_token_manager( $manager ) {
@@ -86,7 +86,8 @@ function admin_notice() {
 		<p>
 			<?php
 				printf(
-					__( '%1$s: An outdated version of this plugin, %2$s, is active. Please deactivate it to use the current version.', 'redis-user-session-storage' ),
+					/* translators: 1: New plugin name, 2: Old plugin name */
+					esc_html__( '%1$s: An outdated version of this plugin, %2$s, is active. Please deactivate it to use the current version.', 'redis-user-session-storage' ),
 					'<strong>Redis User Session Storage</strong>',
 					'<em>WP Redis User Session Storage</em>'
 				);
