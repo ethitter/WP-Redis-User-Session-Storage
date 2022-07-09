@@ -2,22 +2,21 @@
 /**
  * Offload session storage to Redis.
  *
- * @package WP_Redis_User_Session_Storage
+ * @package Redis_User_Session_Storage
  */
 
-/**
- * Don't load in contexts that lack the WP_Session_Tokens class
- */
-if ( ! class_exists( 'WP_Session_Tokens' ) ) {
-	return;
-}
+namespace Redis_User_Session_Storage;
+
+use Redis;
+use RedisException;
+use WP_Session_Tokens;
 
 /**
  * Redis-based user sessions token manager.
  *
  * @since 0.1
  */
-class WP_Redis_User_Session_Storage extends WP_Session_Tokens {
+class Plugin extends WP_Session_Tokens {
 	/**
 	 * Holds the Redis client.
 	 *
@@ -270,13 +269,3 @@ class WP_Redis_User_Session_Storage extends WP_Session_Tokens {
 		return $this->prefix . ':' . $this->user_id;
 	}
 }
-
-/**
- * Override Core's default usermeta-based token storage
- *
- * @return string
- */
-function wp_redis_user_session_storage() {
-	return 'WP_Redis_User_Session_Storage';
-}
-add_filter( 'session_token_manager', 'wp_redis_user_session_storage' );

@@ -9,7 +9,7 @@ module.exports = function( grunt ) {
 
 		addtextdomain: {
 			options: {
-				textdomain: 'wp_redis_user_session_storage',
+				textdomain: 'redis-user-session-storage',
 			},
 			update_all_domains: {
 				options: {
@@ -32,8 +32,8 @@ module.exports = function( grunt ) {
 				options: {
 					domainPath: '/languages',
 					exclude: [ '\.git/*', 'bin/*', 'node_modules/*', 'tests/*' ],
-					mainFile: 'wp-redis-user-session-storage.php',
-					potFilename: 'wp-redis-user-session-storage.pot',
+					mainFile: 'redis-user-session-storage.php',
+					potFilename: 'redis-user-session-storage.pot',
 					potHeaders: {
 						poedit: true,
 						'x-poedit-keywordslist': true

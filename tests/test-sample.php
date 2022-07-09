@@ -2,7 +2,7 @@
 /**
  * Class SampleTest
  *
- * @package WP_Redis_User_Session_Storage
+ * @package Redis_User_Session_Storage
  */
 
 /**
