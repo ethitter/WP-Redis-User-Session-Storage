@@ -69,7 +69,7 @@ function load() {
 add_action( 'plugins_loaded', __NAMESPACE__ . '\load' );
 
 /**
- * Override Core's default usermeta-based token storage
+ * Override Core's default usermeta-based token storage.
  *
  * @return string
  */
