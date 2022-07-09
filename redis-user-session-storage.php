@@ -24,4 +24,55 @@
  * @package Redis_User_Session_Storage
  */
 
-require_once __DIR__ . '/inc/class-redis-user-session-storage.php';
+namespace Redis_User_Session_Storage;
+
+use Redis;
+use WP_Redis_User_Session_Storage;
+use WP_Session_Tokens;
+
+/**
+ * Load plugin when safe to do so, accounting for previous plugin name.
+ *
+ * WordPress.org no longer accepts plugins beginning with the `WP` prefix, so
+ * this was renamed to comply.
+ *
+ * @return void
+ */
+function load() {
+	if ( ! class_exists( Redis::class, false ) ) {
+		return;
+	}
+
+	if ( ! class_exists( WP_Session_Tokens::class, false ) ) {
+		return;
+	}
+
+	if ( class_exists( WP_Redis_User_Session_Storage::class, false ) ) {
+		// TODO: warn user to disable old plugin.
+		return;
+	}
+
+	require_once __DIR__ . '/inc/class-plugin.php';
+
+	class_alias(
+		Plugin::class,
+		'WP_Redis_User_Session_Storage',
+		false
+	);
+
+	add_filter(
+		'session_token_manager',
+		__NAMESPACE__ . '\set_session_token_manager'
+	);
+}
+
+add_action( 'plugins_loaded', __NAMESPACE__ . '\load' );
+
+/**
+ * Override Core's default usermeta-based token storage
+ *
+ * @return string
+ */
+function set_session_token_manager() {
+	return Plugin::class;
+}

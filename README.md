@@ -3,9 +3,9 @@
 **Donate link:** https://ethitter.com/donate/  
 **Tags:** user sessions, session tokens, session storage  
 **Requires at least:** 4.0  
-**Tested up to:** 5.2  
-**Stable tag:** 0.1  
-**Requires PHP:** 5.3  
+**Tested up to:** 6.0  
+**Stable tag:** 0.2  
+**Requires PHP:** 5.6  
 **License:** GPLv2 or later  
 **License URI:** http://www.gnu.org/licenses/gpl-2.0.html  
 
@@ -30,6 +30,9 @@ By default, the plugin uses `127.0.0.1` and `6379` as the default host and port 
 Specify `WP_REDIS_USER_SESSION_HOST`, `WP_REDIS_USER_SESSION_PORT`, and `WP_REDIS_USER_SESSION_DB` to set the necessary, non-default connection values for your Redis instance.
 
 ## Changelog ##
+
+### 0.2 ###
+* Rename plugin to `Redis Session Storage` and submit to WordPress.org plugins repository.
 
 ### 0.1 ###
 * Initial public release

@@ -7,12 +7,9 @@
 
 namespace Redis_User_Session_Storage;
 
-/**
- * Don't load in contexts that lack the WP_Session_Tokens class
- */
-if ( ! class_exists( 'WP_Session_Tokens' ) ) {
-	return;
-}
+use Redis;
+use RedisException;
+use WP_Session_Tokens;
 
 /**
  * Redis-based user sessions token manager.
@@ -272,13 +269,3 @@ class Plugin extends WP_Session_Tokens {
 		return $this->prefix . ':' . $this->user_id;
 	}
 }
-
-/**
- * Override Core's default usermeta-based token storage
- *
- * @return string
- */
-function redis_user_session_storage() {
-	return Plugin::class;
-}
-add_filter( 'session_token_manager', 'redis_user_session_storage' );
