@@ -5,10 +5,6 @@
  * @package WP_Revisions_Control
  */
 
-if ( ! defined( 'WP_REDIS_USER_SESSION_HOST' ) ) {
-	define( 'WP_REDIS_USER_SESSION_HOST', 'redis' );
-}
-
 $redis_user_session_storage = getenv( 'WP_TESTS_DIR' );
 
 if ( ! $redis_user_session_storage ) {
@@ -33,3 +29,8 @@ tests_add_filter( 'muplugins_loaded', 'redis_user_session_storage_tests_manually
 
 // Start up the WP testing environment.
 require $redis_user_session_storage . '/includes/bootstrap.php';
+
+// Set Redis host for CI.
+if ( ! defined( 'WP_REDIS_USER_SESSION_HOST' ) ) {
+	define( 'WP_REDIS_USER_SESSION_HOST', 'redis' );
+}

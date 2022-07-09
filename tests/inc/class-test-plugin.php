@@ -167,20 +167,71 @@ class Test_Plugin extends WP_UnitTestCase {
 	 * Test `update_session()` method.
 	 *
 	 * @covers ::update_session()
-	 * @return void
-	 */
-	public function test_update_session() {
-		$this->markTestIncomplete();
-	}
-
-	/**
-	 * Test `update_sessions()` method.
-	 *
 	 * @covers ::update_sessions()
 	 * @return void
 	 */
-	public function test_update_sessions() {
-		$this->markTestIncomplete();
+	public function test_update_session() {
+		$user_id = $this->factory->user->create();
+		$plugin  = new Plugin( $user_id );
+
+		$plugin->create( time() + 60 );
+
+		$sessions = $this->_invoke_method( $user_id, 'get_sessions' );
+		$verifier = array_keys( $sessions )[0];
+
+		$this->assertNotEmpty(
+			$sessions,
+			'Failed to assert that session was created.'
+		);
+
+		$this->_invoke_method(
+			$user_id,
+			'update_session',
+			array(
+				$verifier,
+			)
+		);
+
+		$this->assertEmpty(
+			$this->_invoke_method(
+				$user_id,
+				'get_session',
+				array(
+					$verifier,
+				)
+			),
+			'Failed to assert that session is not destroyed when no session data is provided.'
+		);
+
+		$plugin->create( time() + 60 );
+
+		$sessions = $this->_invoke_method( $user_id, 'get_sessions' );
+		$verifier = array_keys( $sessions )[0];
+		$session_data = array(
+			'expiration' => time() + 60,
+			'foo'        => 'bar',
+		);
+
+		$this->_invoke_method(
+			$user_id,
+			'update_session',
+			array(
+				$verifier,
+				$session_data,
+			)
+		);
+
+		$this->assertEquals(
+			$session_data,
+			$this->_invoke_method(
+				$user_id,
+				'get_session',
+				array(
+					$verifier,
+				)
+			),
+			'Failed to assert that session is updated when session data is provided.'
+		);
 	}
 
 	/**
@@ -190,7 +241,39 @@ class Test_Plugin extends WP_UnitTestCase {
 	 * @return void
 	 */
 	public function test_destroy_other_sessions() {
-		$this->markTestIncomplete();
+		$user_id = $this->factory->user->create();
+		$plugin  = new Plugin( $user_id );
+
+		$plugin->create( time() + 60 );
+		$plugin->create( time() + 120 );
+		$plugin->create( time() + 180 );
+
+		$sessions = $this->_invoke_method( $user_id, 'get_sessions' );
+
+		$this->assertCount(
+			3,
+			$sessions,
+			'Failed to assert that multiple sessions were created.'
+		);
+
+		$verifier = array_keys( $sessions )[0];
+
+		$this->_invoke_method(
+			$user_id,
+			'destroy_other_sessions',
+			array(
+				$verifier,
+			)
+		);
+
+		$this->assertCount(
+			1,
+			$this->_invoke_method(
+				$user_id,
+				'get_sessions'
+			),
+			'Failed to assert that other sessions are destroyed.'
+		);
 	}
 
 	/**
@@ -200,7 +283,36 @@ class Test_Plugin extends WP_UnitTestCase {
 	 * @return void
 	 */
 	public function test_destroy_all_sessions() {
-		$this->markTestIncomplete();
+		$user_id = $this->factory->user->create();
+		$plugin  = new Plugin( $user_id );
+
+		$plugin->create( time() + 60 );
+		$plugin->create( time() + 120 );
+		$plugin->create( time() + 180 );
+
+		$sessions = $this->_invoke_method( $user_id, 'get_sessions' );
+
+		$this->assertCount(
+			3,
+			$this->_invoke_method(
+				$user_id,
+				'get_sessions'
+			),
+			'Failed to assert that multiple sessions were created.'
+		);
+
+		$this->_invoke_method(
+			$user_id,
+			'destroy_all_sessions'
+		);
+
+		$this->assertEmpty(
+			$this->_invoke_method(
+				$user_id,
+				'get_sessions'
+			),
+			'Failed to assert that all sessions were destroyed.'
+		);
 	}
 
 	/**
@@ -211,7 +323,56 @@ class Test_Plugin extends WP_UnitTestCase {
 	 * @return void
 	 */
 	public function test_drop_sessions() {
-		$this->markTestIncomplete();
+		$user_1        = $this->factory->user->create();
+		$plugin_user_1 = new Plugin( $user_1 );
+		$user_2        = $this->factory->user->create();
+		$plugin_user_2 = new Plugin( $user_2 );
+
+		$plugin_user_1->create( time() + 60 );
+		$plugin_user_1->create( time() + 120 );
+		$plugin_user_1->create( time() + 180 );
+		$plugin_user_2->create( time() + 60 );
+		$plugin_user_2->create( time() + 120 );
+		$plugin_user_2->create( time() + 180 );
+
+		$this->assertCount(
+			3,
+			$this->_invoke_method(
+				$user_1,
+				'get_sessions'
+			),
+			'Failed to assert that multiple sessions were created for user 1.'
+		);
+
+		$this->assertCount(
+			3,
+			$this->_invoke_method(
+				$user_2,
+				'get_sessions'
+			),
+			'Failed to assert that multiple sessions were created for user 2.'
+		);
+
+		$this->_invoke_method(
+			$user_1,
+			'flush_redis_db'
+		);
+
+		$this->assertEmpty(
+			$this->_invoke_method(
+				$user_1,
+				'get_sessions'
+			),
+			'Failed to assert that sessions were destroyed for user 1.'
+		);
+
+		$this->assertEmpty(
+			$this->_invoke_method(
+				$user_2,
+				'get_sessions'
+			),
+			'Failed to assert that sessions were destroyed for user 2.'
+		);
 	}
 
 	/**
