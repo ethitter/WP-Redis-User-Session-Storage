@@ -26,7 +26,7 @@ class Test_Plugin extends WP_UnitTestCase {
 	public function tear_down() {
 		parent::tear_down();
 
-		$this->_invoke_method( 0, 'flush_redis_db' );
+//		$this->_invoke_method( 0, 'flush_redis_db' );
 	}
 
 	/**
