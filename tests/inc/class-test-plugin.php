@@ -13,17 +13,21 @@ use WP_Session_Tokens;
 use WP_UnitTestCase;
 
 /**
+ * Tests for main plugin class.
+ *
  * @coversDefaultClass \Redis_User_Session_Storage\Plugin
  */
-class TestPlugin extends WP_UnitTestCase {
-	protected $plugin;
-
-	public function set_up() {
-		// TODO: use reflection to make this more useful. Create a helper, stop initializing here.
-		$this->plugin = new Plugin( 0 );
-	}
-
+class Test_Plugin extends WP_UnitTestCase {
+	/**
+	 * Test construction.
+	 *
+	 * @covers ::__construct()
+	 * @return void
+	 */
 	public function test__construct() {
+		$user_id      = $this->factory->user->create();
+		$this->plugin = new Plugin( $user_id );
+
 		$this->assertTrue( class_exists( Redis::class, false ) );
 
 		$this->assertInstanceOf( Plugin::class, $this->plugin );
