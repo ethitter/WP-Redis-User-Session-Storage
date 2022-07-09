@@ -399,7 +399,11 @@ class Test_Plugin extends WP_UnitTestCase {
 	 * @param array  $args        Method arguments.
 	 * @return mixed
 	 */
-	protected function _invoke_method( $user_id, $method_name, $args = [] ) {
+	protected function _invoke_method(
+		$user_id,
+		$method_name,
+		$args = array()
+	) {
 		$object     = new Plugin( $user_id );
 		$reflection = new ReflectionClass( $object );
 		$method     = $reflection->getMethod( $method_name );
