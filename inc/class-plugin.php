@@ -104,9 +104,6 @@ class Plugin extends WP_Session_Tokens {
 	/**
 	 * Get all sessions of a user.
 	 *
-	 * @since 0.1
-	 * @access protected
-	 *
 	 * @return array Sessions of a user.
 	 */
 	protected function get_sessions() {
@@ -146,9 +143,6 @@ class Plugin extends WP_Session_Tokens {
 	/**
 	 * Retrieve a session by its verifier (token hash).
 	 *
-	 * @since 0.1
-	 * @access protected
-	 *
 	 * @param string $verifier Verifier of the session to retrieve.
 	 * @return array|null The session, or null if it does not exist
 	 */
@@ -164,9 +158,6 @@ class Plugin extends WP_Session_Tokens {
 
 	/**
 	 * Update a session by its verifier.
-	 *
-	 * @since 0.1
-	 * @access protected
 	 *
 	 * @param string $verifier Verifier of the session to update.
 	 * @param array  $session  Optional. Session. Omitting this argument destroys the session.
@@ -186,18 +177,11 @@ class Plugin extends WP_Session_Tokens {
 	/**
 	 * Update a user's sessions in Redis.
 	 *
-	 * @since 0.1
-	 * @access protected
-	 *
 	 * @param array $sessions Sessions.
 	 */
 	protected function update_sessions( $sessions ) {
 		if ( ! $this->redis_connected ) {
 			return;
-		}
-
-		if ( ! has_filter( 'attach_session_information' ) ) {
-			$sessions = wp_list_pluck( $sessions, 'expiration' );
 		}
 
 		$key = $this->get_key();
@@ -212,9 +196,6 @@ class Plugin extends WP_Session_Tokens {
 	/**
 	 * Destroy all session tokens for a user, except a single session passed.
 	 *
-	 * @since 0.1
-	 * @access protected
-	 *
 	 * @param string $verifier Verifier of the session to keep.
 	 */
 	protected function destroy_other_sessions( $verifier ) {
@@ -224,9 +205,6 @@ class Plugin extends WP_Session_Tokens {
 
 	/**
 	 * Destroy all session tokens for a user.
-	 *
-	 * @since 0.1
-	 * @access protected
 	 */
 	protected function destroy_all_sessions() {
 		$this->update_sessions( array() );
@@ -234,10 +212,6 @@ class Plugin extends WP_Session_Tokens {
 
 	/**
 	 * Destroy all session tokens for all users.
-	 *
-	 * @since 0.1
-	 * @access public
-	 * @static
 	 *
 	 * @return bool
 	 */
@@ -248,9 +222,6 @@ class Plugin extends WP_Session_Tokens {
 	/**
 	 * Empty database, clearing all tokens.
 	 *
-	 * @since 0.2
-	 * @access protected
-	 *
 	 * @return bool
 	 */
 	protected function flush_redis_db() {
@@ -258,10 +229,7 @@ class Plugin extends WP_Session_Tokens {
 	}
 
 	/**
-	 * Build key for current user
-	 *
-	 * @since 0.1
-	 * @access protected
+	 * Build key for current user.
 	 *
 	 * @return string
 	 */
