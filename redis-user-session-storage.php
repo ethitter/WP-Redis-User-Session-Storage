@@ -1,15 +1,9 @@
 <?php
 /**
- * Load plugin.
- *
- * @package WP_Redis_User_Session_Storage
- */
-
-/**
- * Plugin Name: WP Redis User Session Storage
- * Plugin URI: https://ethitter.com/plugins/wp-redis-user-session-storage/
+ * Plugin Name: Redis User Session Storage
+ * Plugin URI: https://ethitter.com/plugins/redis-user-session-storage/
  * Description: Store WordPress session tokens in Redis rather than the usermeta table. Requires the Redis PECL extension.
- * Version: 0.1
+ * Version: 0.2
  * Author: Erick Hitter
  * Author URI: https://ethitter.com/
  *
@@ -26,6 +20,8 @@
  * You should have received a copy of the GNU General Public License
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
+ *
+ * @package Redis_User_Session_Storage
  */
 
-require_once __DIR__ . '/inc/class-wp-redis-user-session-storage.php';
+require_once __DIR__ . '/inc/class-redis-user-session-storage.php';

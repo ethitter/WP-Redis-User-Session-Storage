@@ -2,8 +2,10 @@
 /**
  * Offload session storage to Redis.
  *
- * @package WP_Redis_User_Session_Storage
+ * @package Redis_User_Session_Storage
  */
+
+namespace Redis_User_Session_Storage;
 
 /**
  * Don't load in contexts that lack the WP_Session_Tokens class
@@ -17,7 +19,7 @@ if ( ! class_exists( 'WP_Session_Tokens' ) ) {
  *
  * @since 0.1
  */
-class WP_Redis_User_Session_Storage extends WP_Session_Tokens {
+class Plugin extends WP_Session_Tokens {
 	/**
 	 * Holds the Redis client.
 	 *
@@ -276,7 +278,7 @@ class WP_Redis_User_Session_Storage extends WP_Session_Tokens {
  *
  * @return string
  */
-function wp_redis_user_session_storage() {
-	return 'WP_Redis_User_Session_Storage';
+function redis_user_session_storage() {
+	return Plugin::class;
 }
-add_filter( 'session_token_manager', 'wp_redis_user_session_storage' );
+add_filter( 'session_token_manager', 'redis_user_session_storage' );

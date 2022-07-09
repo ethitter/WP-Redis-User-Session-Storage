@@ -32,13 +32,13 @@
 	<rule ref="WordPress.NamingConventions.PrefixAllGlobals">
 		<properties>
 			<!-- Value: replace the function, class, and variable prefixes used. Separate multiple prefixes with a comma. -->
-			<property name="prefixes" type="array" value="wp_redis_user_session_storage"/>
+			<property name="prefixes" type="array" value="redis_user_session_storage,wp_redis_user_session_storage"/>
 		</properties>
 	</rule>
 	<rule ref="WordPress.WP.I18n">
 		<properties>
 			<!-- Value: replace the text domain used. -->
-			<property name="text_domain" type="array" value="wp_redis_user_session_storage"/>
+			<property name="text_domain" type="array" value="redis-user-session-storage"/>
 		</properties>
 	</rule>
 	<rule ref="WordPress.WhiteSpace.ControlStructureSpacing">
