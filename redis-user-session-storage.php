@@ -48,9 +48,11 @@ function load() {
 
 	require_once __DIR__ . '/inc/class-plugin.php';
 
+	// Hooked at 9 in case old plugin is also active.
 	add_filter(
 		'session_token_manager',
-		__NAMESPACE__ . '\set_session_token_manager'
+		__NAMESPACE__ . '\set_session_token_manager',
+		9
 	);
 }
 load();
@@ -64,8 +66,6 @@ load();
 function set_session_token_manager( $manager ) {
 	if ( class_exists( WP_Redis_User_Session_Storage::class, false ) ) {
 		add_action( 'admin_notices', __NAMESPACE__ . '\admin_notice' );
-
-		return $manager;
 	}
 
 	return Plugin::class;
