@@ -5,6 +5,10 @@
  * @package WP_Revisions_Control
  */
 
+if ( ! defined( 'WP_REDIS_USER_SESSION_HOST' ) ) {
+	define( 'WP_REDIS_USER_SESSION_HOST', 'redis' );
+}
+
 $redis_user_session_storage = getenv( 'WP_TESTS_DIR' );
 
 if ( ! $redis_user_session_storage ) {
