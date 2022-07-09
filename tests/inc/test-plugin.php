@@ -7,6 +7,7 @@
 
 namespace Redis_User_Session_Storage\Tests\Inc;
 
+use Redis;
 use Redis_User_Session_Storage\Plugin;
 use WP_Session_Tokens;
 use WP_UnitTestCase;
@@ -23,6 +24,8 @@ class TestPlugin extends WP_UnitTestCase {
 	}
 
 	public function test__construct() {
+		$this->assertTrue( class_exists( Redis::class, false ) );
+
 		$this->assertInstanceOf( Plugin::class, $this->plugin );
 		$this->assertInstanceOf( WP_Session_Tokens::class, $this->plugin );
 
