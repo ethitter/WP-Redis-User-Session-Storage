@@ -83,6 +83,45 @@ class Test_Plugin extends WP_UnitTestCase {
 	}
 
 	/**
+	 * Test `prepare_session()` method.
+	 *
+	 * @covers ::prepare_session()
+	 * @return void
+	 */
+	public function test_prepare_session() {
+		$this->assertEquals(
+			array(
+				'expiration' => 1,
+			),
+			$this->_invoke_method(
+				0,
+				'prepare_session',
+				array(
+					1,
+				)
+			),
+			'Failed to assert that session data is transformed as expected.'
+		);
+
+		$test_data = array(
+			'expiration' => 2,
+			'foo'        => 'bar',
+		);
+
+		$this->assertEquals(
+			$test_data,
+			$this->_invoke_method(
+				0,
+				'prepare_session',
+				array(
+					$test_data,
+				)
+			),
+			'Failed to assert that session data is not transformed if it is already prepared.'
+		);
+	}
+
+	/**
 	 * Test `get_session()` method.
 	 *
 	 * @covers ::get_session()
@@ -125,41 +164,69 @@ class Test_Plugin extends WP_UnitTestCase {
 	}
 
 	/**
-	 * Test `prepare_session()` method.
+	 * Test `update_session()` method.
 	 *
-	 * @covers ::prepare_session()
+	 * @covers ::update_session()
 	 * @return void
 	 */
-	public function test_prepare_session() {
-		$this->assertEquals(
-			array(
-				'expiration' => 1,
-			),
-			$this->_invoke_method(
-				0,
-'prepare_session',
-				array(
-					1,
-				)
-			),
-			'Failed to assert that session data is transformed as expected.'
-		);
+	public function test_update_session() {
+		$this->markTestIncomplete();
+	}
 
-		$test_data = array(
-			'expiration' => 2,
-			'foo'        => 'bar',
-		);
+	/**
+	 * Test `update_sessions()` method.
+	 *
+	 * @covers ::update_sessions()
+	 * @return void
+	 */
+	public function test_update_sessions() {
+		$this->markTestIncomplete();
+	}
+
+	/**
+	 * Test `destroy_other_sessions()` method.
+	 *
+	 * @covers ::destroy_other_sessions()
+	 * @return void
+	 */
+	public function test_destroy_other_sessions() {
+		$this->markTestIncomplete();
+	}
+
+	/**
+	 * Test `destroy_all_sessions()` method.
+	 *
+	 * @covers ::destroy_all_sessions()
+	 * @return void
+	 */
+	public function test_destroy_all_sessions() {
+		$this->markTestIncomplete();
+	}
+
+	/**
+	 * Test `drop_sessions()` method.
+	 *
+	 * @covers ::drop_sessions()
+	 * @covers ::flush_redis_db()
+	 * @return void
+	 */
+	public function test_drop_sessions() {
+		$this->markTestIncomplete();
+	}
+
+	/**
+	 * Test `get_key()` method.
+	 *
+	 * @covers ::get_key()
+	 * @return void
+	 */
+	public function test_get_key() {
+		$user_id = $this->factory->user->create();
+		$plugin  = new Plugin( $user_id );
 
 		$this->assertEquals(
-			$test_data,
-			$this->_invoke_method(
-				0,
-				'prepare_session',
-				array(
-					$test_data,
-				)
-			),
-			'Failed to assert that session data is not transformed if it is already prepared.'
+			$plugin->prefix . ':' . $user_id,
+			$this->_invoke_method( $user_id, 'get_key' )
 		);
 	}
 
