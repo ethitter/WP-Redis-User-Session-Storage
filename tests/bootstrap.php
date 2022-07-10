@@ -2,7 +2,7 @@
 /**
  * PHPUnit bootstrap file
  *
- * @package WP_Revisions_Control
+ * @package WP_Redis_User_Session_Storage
  */
 
 $redis_user_session_storage = getenv( 'WP_TESTS_DIR' );
@@ -23,7 +23,7 @@ require_once $redis_user_session_storage . '/includes/functions.php';
  * Manually load the plugin being tested.
  */
 function redis_user_session_storage_tests_manually_load_plugin() {
-	require dirname( dirname( __FILE__ ) ) . '/redis-user-session-storage.php';
+	require dirname( dirname( __FILE__ ) ) . '/wp-redis-user-session-storage.php';
 }
 tests_add_filter( 'muplugins_loaded', 'redis_user_session_storage_tests_manually_load_plugin' );
 

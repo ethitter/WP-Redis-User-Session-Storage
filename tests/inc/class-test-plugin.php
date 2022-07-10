@@ -2,7 +2,7 @@
 /**
  * Test plugin features.
  *
- * @package Redis_User_Session_Storage
+ * @package WP_Redis_User_Session_Storage
  */
 
 namespace Redis_User_Session_Storage\Tests\Inc;

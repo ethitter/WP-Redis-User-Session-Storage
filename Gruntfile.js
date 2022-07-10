@@ -32,8 +32,8 @@ module.exports = function( grunt ) {
 				options: {
 					domainPath: '/languages',
 					exclude: [ '\.git/*', 'bin/*', 'node_modules/*', 'tests/*' ],
-					mainFile: 'redis-user-session-storage.php',
-					potFilename: 'redis-user-session-storage.pot',
+					mainFile: 'wp-redis-user-session-storage.php',
+					potFilename: 'wp-redis-user-session-storage.pot',
 					potHeaders: {
 						poedit: true,
 						'x-poedit-keywordslist': true
