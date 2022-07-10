@@ -65,15 +65,22 @@ final class Activation_Deactivation_Hooks {
 		$key = 'session_tokens';
 
 		$count = $wpdb->get_var(
-			"SELECT COUNT(*) FROM $wpdb->usermeta WHERE meta_key = '$key'"
+			$wpdb->prepare(
+				"SELECT COUNT(*) FROM $wpdb->usermeta WHERE meta_key = %s",
+				$key
+			)
 		);
 
 		if ( ! $count ) {
 			wp_clear_scheduled_hook( $this->cron_hook );
+			return;
 		}
 
 		$wpdb->query(
-			"DELETE FROM $wpdb->usermeta WHERE meta_key = '$key' LIMIT 500"
+			$wpdb->prepare(
+				"DELETE FROM $wpdb->usermeta WHERE meta_key = %s LIMIT 500",
+				$key
+			)
 		);
 	}
 
