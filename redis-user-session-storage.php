@@ -47,6 +47,9 @@ function load() {
 	}
 
 	require_once __DIR__ . '/inc/class-plugin.php';
+	require_once __DIR__ . '/inc/class-activation-deactivation-hooks.php';
+
+	new Activation_Deactivation_Hooks( __FILE__ );
 
 	// Hooked at 9 in case old plugin is also active.
 	add_filter(
