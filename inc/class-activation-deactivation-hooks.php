@@ -46,10 +46,7 @@ final class Activation_Deactivation_Hooks {
 	 * @return void
 	 */
 	public function clean_usermeta_storage() {
-		wp_schedule_single_event(
-			time() + 600,
-			'redis_user_session_storage_clean_usermeta_storage'
-		);
+		wp_schedule_single_event( time() + 600, $this->cron_hook );
 	}
 
 	/**
