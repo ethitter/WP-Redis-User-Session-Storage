@@ -1,5 +1,5 @@
 {
-  "name"        : "ethitter/redis-user-session-storage",
+  "name"        : "ethitter/wp-redis-user-session-storage",
   "description" : "Store WordPress session tokens in Redis rather than the usermeta table. Requires the Redis PECL extension.",
   "homepage"    : "https://ethitter.com/",
   "type"        : "wordpress-plugin",
