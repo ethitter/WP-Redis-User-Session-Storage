@@ -40,10 +40,6 @@ Specify any of the following constants to set the necessary, non-default connect
 * `WP_REDIS_USER_SESSION_DB` - Database number to use for the Redis server, defaults to `0`.
 * `WP_REDIS_USER_SESSION_SERIALIZER` - Serializer to use for the Redis server, defaults to `Redis::SERIALIZER_PHP`.
 
-### How do I upgrade from WP Redis User Session Storage? ###
-
-Install and activate this plugin, then deactivate the old plugin. Both plugins can safely be activated together as long as no additional classes extend the `WP_Redis_User_Session_Storage` class. After activating this plugin, deactivate the `WP Redis User Session Storage` plugin and remove it.
-
 ## Changelog ##
 
 ### 0.2 ###
