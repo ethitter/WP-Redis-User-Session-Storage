@@ -49,6 +49,13 @@ function load() {
 	require_once __DIR__ . '/inc/class-plugin.php';
 	require_once __DIR__ . '/inc/class-activation-deactivation-hooks.php';
 
+	// Alias plugin's original class name.
+	class_alias(
+		Plugin::class,
+		'WP_Redis_User_Session_Storage',
+		false
+	);
+
 	new Activation_Deactivation_Hooks( __FILE__ );
 
 	// Hooked at 9 in case old plugin is also active.
@@ -67,35 +74,5 @@ load();
  * @return string
  */
 function set_session_token_manager( $manager ) {
-	if ( class_exists( WP_Redis_User_Session_Storage::class, false ) ) {
-		add_action( 'admin_notices', __NAMESPACE__ . '\admin_notice' );
-	}
-
 	return Plugin::class;
-}
-
-/**
- * Show admin notice to certain users when older version is active.
- *
- * @return void
- */
-function admin_notice() {
-	if ( ! current_user_can( 'activate_plugins' ) ) {
-		return;
-	}
-
-	?>
-	<div id="message" class="error">
-		<p>
-			<?php
-				printf(
-					/* translators: 1: New plugin name, 2: Old plugin name */
-					esc_html__( '%1$s: An outdated version of this plugin, %2$s, is active. Please deactivate it to use the current version.', 'redis-user-session-storage' ),
-					'<strong>Redis User Session Storage</strong>',
-					'<em>WP Redis User Session Storage</em>'
-				);
-			?>
-		</p>
-	</div>
-	<?php
 }

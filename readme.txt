@@ -45,9 +45,8 @@ Install and activate this plugin, then deactivate the old plugin. Both plugins c
 == Changelog ==
 
 = 0.2 =
-* Rename plugin to `Redis User Session Storage` to comply with WordPress.org plugin-naming requirements.
-* Allow two versions of this plugin to co-exist safely to support seamless migration.
-* Changes plugin class name to `Redis_User_Session_Storage` from `WP_Redis_User_Session_Storage`.
+* Add cleanup routine for usermeta storage.
+* Prepare plugin for WordPress.org release.
 
 = 0.1 =
 * Initial public release
