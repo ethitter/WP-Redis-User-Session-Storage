@@ -38,7 +38,7 @@
 	<rule ref="WordPress.WP.I18n">
 		<properties>
 			<!-- Value: replace the text domain used. -->
-			<property name="text_domain" type="array" value="redis-user-session-storage"/>
+			<property name="text_domain" type="array" value="wp-redis-user-session-storage"/>
 		</properties>
 	</rule>
 	<rule ref="WordPress.WhiteSpace.ControlStructureSpacing">

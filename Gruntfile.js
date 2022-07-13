@@ -9,7 +9,7 @@ module.exports = function( grunt ) {
 
 		addtextdomain: {
 			options: {
-				textdomain: 'redis-user-session-storage',
+				textdomain: 'wp-redis-user-session-storage',
 			},
 			update_all_domains: {
 				options: {
