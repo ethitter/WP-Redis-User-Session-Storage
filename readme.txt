@@ -15,7 +15,9 @@ Store WordPress session tokens in Redis rather than the usermeta table.
 
 Store WordPress user session tokens in Redis rather than the usermeta table.
 
-This plugin was previously known as `WP Redis User Session Storage` and was renamed to comply with WordPress.org naming constraints.
+This plugin was previously known as `WP Redis User Session Storage` and was renamed
+to comply with WordPress.org naming constraints. The previous class name is
+aliased to support existing extensions.
 
 == Installation ==
 
@@ -37,10 +39,6 @@ Specify any of the following constants to set the necessary, non-default connect
 * `WP_REDIS_USER_SESSION_AUTH` - Password for the Redis server, if required.
 * `WP_REDIS_USER_SESSION_DB` - Database number to use for the Redis server, defaults to `0`.
 * `WP_REDIS_USER_SESSION_SERIALIZER` - Serializer to use for the Redis server, defaults to `Redis::SERIALIZER_PHP`.
-
-= How do I upgrade from WP Redis User Session Storage? =
-
-Install and activate this plugin, then deactivate the old plugin. Both plugins can safely be activated together as long as no additional classes extend the `WP_Redis_User_Session_Storage` class. After activating this plugin, deactivate the `WP Redis User Session Storage` plugin and remove it.
 
 == Changelog ==
 
