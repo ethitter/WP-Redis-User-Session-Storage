@@ -1,5 +1,2 @@
 include:
-  - remote: https://git-cdn.e15r.co/gitlab/ci/wordpress/-/raw/main/plugins/templates/variables.yml
-  - remote: https://git-cdn.e15r.co/gitlab/ci/wordpress/-/raw/main/plugins/templates/cache.yml
-  - remote: https://git-cdn.e15r.co/gitlab/ci/wordpress/-/raw/main/plugins/templates/before-script-redis.yml
-  - remote: https://git-cdn.e15r.co/gitlab/ci/wordpress/-/raw/main/plugins/templates/matrix-redis.yml
+  - remote: https://git-cdn.e15r.co/gitlab/ci/wordpress/-/raw/main/plugins/default-redis.yml
