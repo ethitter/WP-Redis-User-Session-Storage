@@ -6,6 +6,8 @@
  * Version: 0.2
  * Author: Erick Hitter
  * Author URI: https://ethitter.com/
+ * Text Domain: wp-redis-user-session-storage
+ * Domain Path: /languages/
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -27,7 +29,6 @@
 namespace Redis_User_Session_Storage;
 
 use Redis;
-use WP_Redis_User_Session_Storage;
 use WP_Session_Tokens;
 
 /**
@@ -58,6 +59,10 @@ function load() {
 
 	new Activation_Deactivation_Hooks( __FILE__ );
 
+	add_action( 'plugins_loaded',
+		__NAMESPACE__ . '\action_plugins_loaded'
+	);
+
 	// Hooked at 9 in case old plugin is also active.
 	add_filter(
 		'session_token_manager',
@@ -66,6 +71,19 @@ function load() {
 	);
 }
 load();
+
+/**
+ * Perform various actions after plugin loads.
+ *
+ * @return void
+ */
+function action_plugins_loaded() {
+	load_plugin_textdomain(
+		'wp-redis-user-session-storage',
+		false,
+		dirname( plugin_basename( __FILE__ ) ) . '/languages/'
+	);
+}
 
 /**
  * Override Core's default usermeta-based token storage.
