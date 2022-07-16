@@ -59,7 +59,8 @@ function load() {
 
 	new Activation_Deactivation_Hooks( __FILE__ );
 
-	add_action( 'plugins_loaded',
+	add_action(
+		'plugins_loaded',
 		__NAMESPACE__ . '\action_plugins_loaded'
 	);
 
